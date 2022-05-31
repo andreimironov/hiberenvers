@@ -1,0 +1,20 @@
+version: '3.2'
+
+volumes:
+  hiberenvers-postgres:
+    driver: local
+
+services:
+  postgres:
+    image: postgres:11.3
+    container_name: hiberenvers-postgres
+    volumes:
+      - type: volume
+        source: hiberenvers-postgres
+        target: /var/lib/postgresql/dataConfig
+    environment:
+      POSTGRES_DB: hiberenvers
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespass
+    ports:
+      - "5432:5432"
