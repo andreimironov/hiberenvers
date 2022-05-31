@@ -1,10 +1,15 @@
 package com.example.hibernevers.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -13,19 +18,19 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@TypeDefs({
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
+@Audited
 public class SimpleEntity {
     @Id
-    @GenericGenerator(
-            name = "simple_entity_generator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "simple_entity_simple_entity_id_seq")
-            }
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "simple_entity_generator")
-    @Access(AccessType.PROPERTY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "simple_entity_id")
     private Long id;
 
     private String name;
+    private String surname;
+
+    @Type(type = "jsonb")
+    private SimpleEntityPayload payload;
 }
